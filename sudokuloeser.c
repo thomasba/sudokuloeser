@@ -24,6 +24,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>
+#include <ctype.h>
 #ifdef linux
 	#include <regex.h>
 #endif
@@ -37,7 +39,8 @@ typedef struct sudoku {
 
 /* Allgemeine Funktionen */
 	int  s_einlesen(char*, sudoku*); /* Einlesen aus Datei*/
-	void s_ausgabe(sudoku*); /* Auf dem bildschirm ausgeben */
+	void s_ausgabe(sudoku*,int); /* Auf dem bildschirm ausgeben */
+	void s_ausgabe_unicode(sudoku*,int); /* Auf dem bildschirm ausgeben, Unicode Rahmenelemente */
 	void print_help(int,char**); /* "Hilfe" ausgeben */
 /* Loeserfunktionen */
 	/* Funktion fuer Backtracking */
@@ -59,31 +62,63 @@ const int OUTPUT_COLOR=0;
 
 int main(int argc, char **argv) {
 	sudoku s={ {{0}}, {{0}}, {{{1}}}, 81 };
+	char* outfile = NULL;
 	int st=0,sl=0,ret=0;
+	int c,unicode=0,color=0,outfilev=0,solve=1;
 #ifdef linux
 	struct timespec ts,te,l_ts,l_te;
 	long double t;
 	clock_gettime(CLOCK_REALTIME, &ts);
+	color = 1;
 #endif
-	/* Hilfe ausgeben, wenn angefordert oder zuwenig Parameter */
-	if(argc < 2 || strcmp(argv[1],"-h") == 0 || strcmp(argv[1],"--help") == 0) {
-		print_help(argc,argv);
-		exit(0);
-	}
+	/* Argumente auslesen */
+	while ((c = getopt (argc, argv, "cho:uUn")) != -1)
+		switch(c) {
+			case 'h':
+				print_help(argc,argv);
+				exit(0);
+				break;
+			case 'u':
+			case 'U':
+				unicode = 1;
+				break;
+			case 'c':
+				color = 0;
+				break;
+			case 'o':
+				if(outfilev==0) outfile = ((strcmp(optarg,"") == 0) ? "sudoku_geloest.txt" : optarg);
+				outfilev = 1;
+				break;
+			case 'n':
+				solve = 0;
+				break;
+			case '?':
+				if (optopt == 'c')
+					fprintf (stderr, "Option -%c requires an argument.\n", optopt);
+				else if (isprint (optopt))
+					fprintf (stderr, "Unknown option `-%c'.\n", optopt);
+				else
+					fprintf (stderr,"Unknown option character `\\x%x'.\n",optopt);
+				exit(1);
+				break;
+		}
 	/* Aus Datei einlesen und Fehler auswerten */
-	st = s_einlesen(argv[1],&s);
+	st = s_einlesen(argv[optind],&s);
 	if(st == 0) {
 		fprintf(stderr,"Ungueltiges Dateiformat!\n");
-		s_write_error( (argc == 3) ? argv[2] : "sudoku_geloest.txt",0 );
+		if(outfilev) s_write_error( outfile ,0 );
 		return 2;
 	}else if(st == -1) {
-		#ifdef linux
-		fprintf(stderr,"\033[31;1mDas Sudoku ist nicht loesbar!!\033[0m\n\n");
-		#else
-		fprintf(stderr,"Das Sudoku ist nicht loesbar!!\n\n");
-		#endif
-		s_write_error( (argc == 3) ? argv[2] : "sudoku_geloest.txt",1 );
+		if(color)
+			fprintf(stderr,"\033[31;1mDas Sudoku ist nicht loesbar!!\033[0m\n\n");
+		else
+			fprintf(stderr,"Das Sudoku ist nicht loesbar!!\n\n");
+		if(outfilev) s_write_error( outfile ,1 );
 		return 1;
+	}
+	if(solve == 0) {
+		(unicode == 1) ? s_ausgabe_unicode(&s,color) : s_ausgabe(&s,color);
+		exit(0);
 	}
 	/* Sudoku Loesen, Loseung ausgeben und in Datei schreiben */
 	printf("Suche...\nProbiere es mit Logik...     ");
@@ -102,21 +137,19 @@ int main(int argc, char **argv) {
 	clock_gettime(CLOCK_REALTIME, &l_te);
 #endif
 	if(sl == 0) {
-		#ifdef linux
-		printf("\033[31;1mDas Sudoku ist nicht loesbar!!\033[0m\n");
-		#else
-		fprintf(stderr,"Das Sudoku ist nicht loesbar!!\n");
-		#endif
-		s_write_error( (argc == 3) ? argv[2] : "sudoku_geloest.txt",2 );
+		if(color)
+			printf("\033[31;1mDas Sudoku ist nicht loesbar!!\033[0m\n");
+		else
+			fprintf(stderr,"Das Sudoku ist nicht loesbar!!\n");
+		if(outfilev) s_write_error( outfile , 2 );
 		ret = 1;
 	}else{
-		#ifdef linux
-		printf("\033[32;1mLoesung gefunden:\033[0m\n\n");
-		#else
-		printf("Loesung gefunden:\n\n");
-		#endif
-		s_ausgabe(&s);
-		s_write( (argc == 3) ? argv[2] : "sudoku_geloest.txt",&s );
+		if(color)
+			printf("\033[32;1mLoesung gefunden:\033[0m\n\n");
+		else
+			printf("Loesung gefunden:\n\n");
+		(unicode == 1) ? s_ausgabe_unicode(&s,color) : s_ausgabe(&s,color);
+		if(outfilev) s_write( outfile ,&s );
 	}
 #ifdef linux
 	clock_gettime(CLOCK_REALTIME, &te);
@@ -184,25 +217,24 @@ int s_einlesen(char * path, sudoku * sf) {
 	return 1;
 }
 
-void s_ausgabe(sudoku* s) {
+void s_ausgabe(sudoku* s,int color) {
 	int i,j;
 	for(i=0;i<9;i++) {
 		if(i%3==0) printf("+-------+-------+-------+\n");
 		for(j=0;j<9;j++) {
 			if(j%3==0) printf("| ");
-#ifdef linux
-			if(s->feld[i][j] == 0) {
-				printf("\033[30;1m?\033[0m ");
-			}else if(s->vorgabe[i][j] == 1){
-				printf("\033[32;1m%d\033[0m ",s->feld[i][j]);
-			}else if(s->vorgabe[i][j] == 2){
-				printf("\033[33;1m%d\033[0m ",s->feld[i][j]);
-			}else{
+			if(color) {
+				if(s->feld[i][j] == 0) {
+					printf("\033[30;1m?\033[0m ");
+				}else if(s->vorgabe[i][j] == 1){
+					printf("\033[32;1m%d\033[0m ",s->feld[i][j]);
+				}else if(s->vorgabe[i][j] == 2){
+					printf("\033[33;1m%d\033[0m ",s->feld[i][j]);
+				}else{
+					printf("%d ",s->feld[i][j]);
+				}
+			}else
 				printf("%d ",s->feld[i][j]);
-			}
-#else
-			printf("%d ",s->feld[i][j]);
-#endif
 
 		}
 		printf("|\n");
@@ -210,19 +242,66 @@ void s_ausgabe(sudoku* s) {
 	printf("+-------+-------+-------+\n");
 }
 
+void s_ausgabe_unicode(sudoku* s,int color) {
+    int i,j;
+    printf("┏━━━┯━━━┯━━━┳━━━┯━━━┯━━━┳━━━┯━━━┯━━━┓\n");
+    for(i=0;i<9;i++) {
+        if(i%3==0 && i!=0) printf("┣━━━┿━━━┿━━━╋━━━┿━━━┿━━━╋━━━┿━━━┿━━━┫\n");
+            else if (i!=0) printf("┠───┼───┼───╂───┼───┼───╂───┼───┼───┨\n");
+        for(j=0;j<9;j++) {
+            if(j%3==0) printf("┃ ");
+                else printf("│ ");
+			if(color) {
+    	        if(s->feld[i][j] == 0) {
+    	            /* printf("\033[30;1m?\033[0m "); */
+					printf("  ");
+    	        }else if(s->vorgabe[i][j] == 1){ 
+    	            printf("\033[32;1m%d\033[0m ",s->feld[i][j]);
+    	        }else if(s->vorgabe[i][j] == 2){ 
+    	            printf("\033[33;1m%d\033[0m ",s->feld[i][j]);
+    	        }else{
+    	            printf("%d ",s->feld[i][j]);
+	            }   
+			}else{
+				if(s->feld[i][j] == 0) {
+					printf("  ");
+				}else{
+		            printf("%d ",s->feld[i][j]);
+				}
+			}
+
+        }   
+        printf("┃\n");
+    }   
+    printf("┗━━━┷━━━┷━━━┻━━━┷━━━┷━━━┻━━━┷━━━┷━━━┛\n");
+}
+
+
 void print_help(int argc, char **argv) {
 #ifdef linux
 	printf("\033[0;1mUsage:\033[0m\n");
-	printf("  %s <input_file> [<output_file>]\n",argv[0]);
+	printf("  %s [optionen] <input_file> \n",argv[0]);
+	printf("\033[0;1mOptionen\033[0m\n");
+	printf("  -U         Unicode Rahmenelemente\n");
+	printf("  -h         Diese Hilfe\n");
+	printf("  -o <file>  Ausgabedatei\n");
+	printf("  -c         Keine Farbe\n");
+	printf("  -n         Nicht loesen, nur ausgeben\n");
 	printf("\033[0;1mAusgabe:\033[0m\n");
-	printf("  \033[32;1mgruen:\033[0m Vorgegebene Werte\n");
-	printf("  \033[33;1mgelb:\033[0m  Mit Logik gefundene Werte\n");
-	printf("  weis:  Per Backtracking gefundene Werte\n\n");
+	printf("  \033[32;1mgruen:\033[0m     Vorgegebene Werte\n");
+	printf("  \033[33;1mgelb:\033[0m      Mit Logik gefundene Werte\n");
+	printf("  weis:      Per Backtracking gefundene Werte\n\n");
 	printf("By Thomas Battermann\n");
 #else
-    printf("Usage:\n");
-    printf("  %s <input_file> [<output_file>]\n\n",argv[0]);
-    printf("By Thomas Battermann\n");
+	printf("Usage:\n");
+	printf("  %s [optionen] <input_file> \n",argv[0]);
+	printf("Optionen:\n");
+	printf("  -U         Unicode Rahmenelemente (Probleme unter Windows!)\n");
+	printf("  -h         Diese Hilfe\n");
+	printf("  -o <file>  Ausgabedatei\n");
+	printf("  -n         Nicht loesen, nur ausgeben\n");
+	printf("By Thomas Battermann\n");
+
 #endif
 }
 
@@ -262,6 +341,7 @@ int  s_write(char* fn,sudoku* s) {
 	int i,j;
 	FILE * fp = fopen(fn,"w");
 	if(fp == NULL) return 0;
+	printf("Schreibe in Datei `%s'...\n",fn);
 	for(i=0;i<9;i++) {
 		for(j=0;j<9;j++) {
 			fputc(s->feld[i][j]+48,fp);
@@ -276,6 +356,7 @@ int  s_write_error(char* fn,int err) {
 	/* Fehler in Datei schreiben */
 	FILE * fp = fopen(fn,"w+");
 	if(fp == NULL) return 0;
+	printf("Schreibe Fehler in Datei `%s'...\n",fn);
 	switch(err) {
 		case 0:
 			fputs("Eingabefehler\nEingabedatei ist Fehlerhaft!\n",fp);
