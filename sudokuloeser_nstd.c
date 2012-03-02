@@ -138,7 +138,13 @@ int main(int argc, char **argv) {
 	}
 	/* falls nicht gelöst werden soll: */
 	if(solve == 0) {
-		(unicode == 1) ? s_ausgabe_unicode(&s,color) : s_ausgabe(&s,color);
+		if(unicode == 1) {
+			s_ausgabe_unicode(&s,color);
+		}else if(plain == 1) {
+			s_plain(&s);
+		}else{
+			s_ausgabe(&s,color);
+		}
 		exit(0);
 	}
 	/* Sudoku Loesen, Loseung ausgeben und in Datei schreiben */
