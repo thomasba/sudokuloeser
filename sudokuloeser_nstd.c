@@ -43,6 +43,7 @@ typedef struct sudoku {
 	int  s_b_einlesen(char*, sudoku*); /* Belegung aus Datei einlesen */
 	void s_ausgabe(sudoku*,int); /* Auf dem bildschirm ausgeben */
 	void s_ausgabe_unicode(sudoku*,int); /* Auf dem bildschirm ausgeben, Unicode Rahmenelemente */
+	void s_plain(sudoku*); /* Plaintext (wie eingabe-datei) */
 	char* colors(char);
 	char* border(char);
 	void print_help(int,char**); /* "Hilfe" ausgeben */
@@ -64,10 +65,13 @@ const int OUTPUT_COLOR=1;
 const int OUTPUT_COLOR=0;
 #endif
 
+/* Ausgabe unterdrücken */
+int silent = 0;
+
 int main(int argc, char **argv) {
 	sudoku s={ {{0}}, {{0}}, {{0}}, {{{1}}}, 81 };
 	char* outfile = NULL;
-	int st=0,sl=0,ret=0,sb=0;
+	int st=0,sl=0,ret=0,sb=0,plain=0;
 	int c,unicode=0,color=0,outfilev=0,solve=1;
 #ifdef linux
 	struct timespec ts,te,l_ts,l_te;
@@ -76,7 +80,7 @@ int main(int argc, char **argv) {
 	color = 1;
 #endif
 	/* Argumente auslesen */
-	while ((c = getopt (argc, argv, "cho:uUn")) != -1)
+	while ((c = getopt (argc, argv, "cho:uUnsp")) != -1)
 		switch(c) {
 			case 'h':
 				print_help(argc,argv);
@@ -95,6 +99,12 @@ int main(int argc, char **argv) {
 				break;
 			case 'n':
 				solve = 0;
+				break;
+			case 's':
+				silent = 1;
+				break;
+			case 'p':
+				plain = 1;
 				break;
 			case '?':
 				if (optopt == 'c')
@@ -132,42 +142,51 @@ int main(int argc, char **argv) {
 		exit(0);
 	}
 	/* Sudoku Loesen, Loseung ausgeben und in Datei schreiben */
-	printf("Suche...\nProbiere es mit Logik...     ");
+	if(!silent) printf("Suche...\nProbiere es mit Logik...     ");
 #ifdef linux
 	clock_gettime(CLOCK_REALTIME, &l_ts);
 #endif
 	sl = sl_loes(&s);
 	if(sl != 1) {
-		printf("FAIL\nNun mit Backtracking...      ");
+		if(!silent) printf("FAIL\nNun mit Backtracking...      ");
 		sl = s_loes_track(&s,0);
-		printf("%s\n",(sl != 1 ? "FAIL" : "OK" ));
+		if(!silent) printf("%s\n",(sl != 1 ? "FAIL" : "OK" ));
 	}else{
-		printf("OK\n");
+		if(!silent) printf("OK\n");
 	}
 #ifdef linux
 	clock_gettime(CLOCK_REALTIME, &l_te);
 #endif
 	if(sl == 0) {
 		if(color)
-			printf("\033[31;1mDas Sudoku ist nicht loesbar!!\033[0m\n");
+			fprintf(stderr,"\033[31;1mDas Sudoku ist nicht loesbar!!\033[0m\n");
 		else
 			fprintf(stderr,"Das Sudoku ist nicht loesbar!!\n");
 		if(outfilev) s_write_error( outfile , 2 );
 		ret = 1;
 	}else{
-		if(color)
-			printf("\033[32;1mLoesung gefunden:\033[0m\n\n");
-		else
-			printf("Loesung gefunden:\n\n");
-		(unicode == 1) ? s_ausgabe_unicode(&s,color) : s_ausgabe(&s,color);
+		if(color) {
+			if(!silent) printf("\033[32;1mLoesung gefunden:\033[0m\n\n");
+		}else{
+			if(!silent) printf("Loesung gefunden:\n\n");
+		}
+		if(unicode == 1) {
+			s_ausgabe_unicode(&s,color);
+		}else if(plain == 1) {
+			s_plain(&s);
+		}else{
+			s_ausgabe(&s,color);
+		}
 		if(outfilev) s_write( outfile ,&s );
 	}
 #ifdef linux
-	clock_gettime(CLOCK_REALTIME, &te);
-	t = (l_te.tv_sec + l_te.tv_nsec*0.000000001)-(l_ts.tv_sec + l_ts.tv_nsec*0.000000001);
-	printf("\nBenoetigte Zeit (loesen): %Lfs\n",t);
-	t = (te.tv_sec + te.tv_nsec*0.000000001)-(ts.tv_sec + ts.tv_nsec*0.000000001);
-	printf("Benoetigte Zeit (gesamt): %Lfs\n",t);
+	if(!silent) {
+		clock_gettime(CLOCK_REALTIME, &te);
+		t = (l_te.tv_sec + l_te.tv_nsec*0.000000001)-(l_ts.tv_sec + l_ts.tv_nsec*0.000000001);
+		printf("\nBenoetigte Zeit (loesen): %Lfs\n",t);
+		t = (te.tv_sec + te.tv_nsec*0.000000001)-(ts.tv_sec + ts.tv_nsec*0.000000001);
+		printf("Benoetigte Zeit (gesamt): %Lfs\n",t);
+	}
 #endif
 	return ret;
 }
@@ -300,6 +319,16 @@ char* colors(char val) {
 	return "";
 }
 
+void s_plain(sudoku* s) {
+	int i,j;
+	for(i=0;i<9;i++) {
+		for(j=0;j<9;j++) {
+			printf("%d",s->feld[i][j]);
+		}
+		printf("\n");
+	}
+}
+
 void s_ausgabe(sudoku* s,int color) {
 	int i,j;
 	for(i=0;i<9;i++) {
@@ -307,7 +336,7 @@ void s_ausgabe(sudoku* s,int color) {
 		for(j=0;j<9;j++) {
 			if(j%3==0 && !color) printf("| ");
 			if(color) {
-				printf("%s%d\033[0m",colors(s->belegung[i][j]),s->feld[i][j]);
+				printf("%s%d \033[0m",colors(s->belegung[i][j]),s->feld[i][j]);
 				/*if(s->feld[i][j] == 0) {
 					printf("\033[30;1m?\033[0m ");
 				}else if(s->vorgabe[i][j] == 1){
@@ -377,7 +406,6 @@ void s_ausgabe_unicode(sudoku* s,int color) {
 		printf("\n");
 		/* trenner für i != 8 */
 		if(i<8) {
-			/* TODO */
 			printf("%s", (s->belegung[ i ][ j ] == s->belegung[i+1][ j ]) ? "┠───" : "┣━━━" );
 			for(j = 0; j < 8; j++) {
 				printf("%s", rahmen(
@@ -399,39 +427,6 @@ void s_ausgabe_unicode(sudoku* s,int color) {
 		printf("%s━━━",(s->belegung[8][i] == s->belegung[8][i+1]) ? "┷" : "┻" );
 	}
 	printf("┛\n");
-
-	/* alt
-    int i,j;
-    printf("┏━━━┯━━━┯━━━┳━━━┯━━━┯━━━┳━━━┯━━━┯━━━┓\n");
-    for(i=0;i<9;i++) {
-        if(i%3==0 && i!=0) printf("┣━━━┿━━━┿━━━╋━━━┿━━━┿━━━╋━━━┿━━━┿━━━┫\n");
-            else if (i!=0) printf("┠───┼───┼───╂───┼───┼───╂───┼───┼───┨\n");
-        for(j=0;j<9;j++) {
-            if(j%3==0) printf("┃ ");
-                else printf("│ ");
-			if(color) {
-    	        if(s->feld[i][j] == 0) {
-					printf("  ");
-    	        }else if(s->vorgabe[i][j] == 1){ 
-    	            printf("\033[32;1m%d\033[0m ",s->feld[i][j]);
-    	        }else if(s->vorgabe[i][j] == 2){ 
-    	            printf("\033[33;1m%d\033[0m ",s->feld[i][j]);
-    	        }else{
-    	            printf("%d ",s->feld[i][j]);
-	            }   
-			}else{
-				if(s->feld[i][j] == 0) {
-					printf("  ");
-				}else{
-		            printf("%d ",s->feld[i][j]);
-				}
-			}
-
-        }   
-        printf("┃\n");
-    }   
-    printf("┗━━━┷━━━┷━━━┻━━━┷━━━┷━━━┻━━━┷━━━┷━━━┛\n");
-	*/
 }
 
 
@@ -444,7 +439,9 @@ void print_help(int argc, char **argv) {
 	printf("  -h         Diese Hilfe\n");
 	printf("  -o <file>  Ausgabedatei\n");
 	printf("  -c         Keine Farbe\n");
+	printf("  -p         Plaintext\n");
 	printf("  -n         Nicht loesen, nur ausgeben\n");
+	printf("  -s         Nur die Lösung ausgeben\n");
 	printf("\033[0;1mAusgabe:\033[0m\n");
 	printf("  \033[32;1mgruen:\033[0m     Vorgegebene Werte\n");
 	printf("  \033[33;1mgelb:\033[0m      Mit Logik gefundene Werte\n");
@@ -457,6 +454,8 @@ void print_help(int argc, char **argv) {
 	printf("  -U         Unicode Rahmenelemente (Probleme unter Windows!)\n");
 	printf("  -h         Diese Hilfe\n");
 	printf("  -o <file>  Ausgabedatei\n");
+	printf("  -p         Plaintext\n");
+	printf("  -s         Nur die Lösung ausgeben\n");
 	printf("  -n         Nicht loesen, nur ausgeben\n");
 	printf("By Thomas Battermann\n");
 
