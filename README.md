@@ -1,8 +1,10 @@
-# About
+# sudokuloeser
+
+## About
 
 sudokuloeser is a simple sudoku solver written in C. It is optimized for speed.
 
-# Features
+## Features
 
 With sudokuloeser you can easily solve sudokus.
 
@@ -10,18 +12,19 @@ Optional you can specify a file, where to save the solution.
 
 For better usage the Output is colored.
 
-# Requirements
+## Requirements
 
 * Linux
-* Windows: some restrictions
+* Windows: some restrictions  
+  `make ARCH=win`
 * C Compiler
 
-# Installation
+## Installation
 
     make
     make install
 
-# Usage
+## Usage
 
     Usage:
       ./sudokuloeser [options] <input_file>

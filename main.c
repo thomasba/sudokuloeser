@@ -253,9 +253,9 @@ void print_help(int argc, char **argv) {
 	printf("  white:      Values find by backtracking\n\n");
 	printf("By Thomas Battermann\n");
 #else
-printf("\033[0;1mUsage:\033[0m\n");
+printf("Usage:\n");
 	printf("  %s [options] <input_file>\n",argv[0]);
-	printf("\033[0;1mOptions\033[0m\n");
+	printf("Options\n");
 	printf("  -U         Unicode borders\n");
 	printf("  -h         This help\n");
 	printf("  -H         HTML-Output\n");
@@ -264,11 +264,7 @@ printf("\033[0;1mUsage:\033[0m\n");
 	printf("  -O <file>  Overlay for non-standard files\n");
 	printf("  -p         Plaintext\n");
 	printf("  -n         Dont solve, just print\n");
-	printf("  -s         silent\n");
-	printf("\033[0;1mOutput:\033[0m\n");
-	printf("  \033[32;1mgreen:\033[0m     Given values\n");
-	printf("  \033[33;1myellow:\033[0m      Values find by logic\n");
-	printf("  white:      Values find by backtracking\n\n");
+	printf("  -s         silent\n\n");
 	printf("By Thomas Battermann\n");
 #endif
 }
