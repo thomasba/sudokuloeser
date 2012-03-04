@@ -9,10 +9,10 @@ int s_b_einlesen(char * path, sudoku * sf) {
 	int k;
 	FILE * fp = fopen(path,"r");
 	char ch;
-	char tmp[50] = "";
 	char line[150] = "";
 	int z=0,sp=0;
 #ifdef linux
+	char tmp[50] = "";
 	regmatch_t m[1];
 	regex_t reg;
 #endif
