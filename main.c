@@ -55,7 +55,6 @@ int main(int argc, char **argv) {
 	readOptions(argc,argv,&o);
 	/* feed the functions */
 	if(o.overlay == NULL) {
-		printf("default\n");
 		newStandard(&o);
 	}else{
 		newNonStandard(&o);
