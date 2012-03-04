@@ -1,5 +1,5 @@
-#ifndef output_nstd_h__
-#define output_nstd_h__
+#ifndef output_nstd_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__
+#define output_nstd_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__
 
 /**
  * Print the Sudoku on stdout using unicode borders
@@ -27,4 +27,4 @@ char* rahmen(char v);
  */
 char* colors(char val);
 
-#endif /* output_nstd_h__ */
+#endif /* output_nstd_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__ */

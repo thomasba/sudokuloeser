@@ -1,5 +1,5 @@
-#ifndef input_h__
-#define input_h__
+#ifndef input_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__
+#define input_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__
 
 /**
  * Reads the Sudoku from file
@@ -9,4 +9,4 @@
  */
 int s_einlesen(char * path, sudoku * sf, options * o);
 
-#endif /* input_h__ */
+#endif /* input_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__ */

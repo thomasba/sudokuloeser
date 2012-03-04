@@ -1,5 +1,5 @@
-#ifndef solver_nstd_h__
-#define solver_nstd_h__
+#ifndef solver_nstd_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__
+#define solver_nstd_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__
 
 /**
  * Checks if there are other posibilities for the number if not return 1
@@ -28,4 +28,4 @@ void solver_nstd_set_num(sudoku* s,int zahl,int z, int sp);
  */
 int  solver_nstd_test(sudoku *s, int z, int sp, int zahl);
 
-#endif /* solver_nstd_h__ */
+#endif /* solver_nstd_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__ */

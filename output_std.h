@@ -1,5 +1,5 @@
-#ifndef output_std_h__
-#define output_std_h__
+#ifndef output_std_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__
+#define output_std_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__
 
 /**
  * Print the Sudoku on stdout using unicode borders
@@ -15,4 +15,4 @@ void std_ausgabe_unicode(sudoku* s,int color);
  */
 void std_ausgabe(sudoku* s,int color);
 
-#endif /* output_std_h__ */
+#endif /* output_std_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__ */

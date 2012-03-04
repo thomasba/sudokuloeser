@@ -1,5 +1,5 @@
-#ifndef solver_h__
-#define solver_h__
+#ifndef solver_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__
+#define solver_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__
 
 /**
  * Tries to solve the Sudoku with logic
@@ -14,4 +14,4 @@ int  sl_loes(sudoku* s, options * o);
  */
 int s_loes_track(sudoku * s, int pos, options * o);
 
-#endif /* solver_h__ */
+#endif /* solver_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__ */

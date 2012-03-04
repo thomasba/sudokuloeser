@@ -39,9 +39,9 @@
 
 int main(int argc, char **argv) {
 #ifdef linux
-	options o = {0,1,0,0,0,1,NULL,NULL,NULL,NULL,NULL,NULL};
+	options o = {0,1,0,0,0,0,1,NULL,NULL,NULL,NULL,NULL,NULL};
 #else
-	options o = {0,0,0,0,0,1,NULL,NULL,NULL,NULL,NULL,NULL};
+	options o = {0,0,0,0,0,0,1,NULL,NULL,NULL,NULL,NULL,NULL};
 #endif
 	sudoku s={ {{0}}, {{0}}, {{0}}, {{{1}}}, 81 };
 	char st=0,ret=0;
@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
 	}else if(o.html == 1){
 		for(i=0;i<9;i++) {
 			for(j=0;j<9;j++) {
-				s.feld[i][j] = ((i/3)*3)+1+(j/3);
+				s.belegung[i][j] = ((i/3)*3)+1+(j/3);
 			}
 		}
 	}
@@ -151,6 +151,7 @@ void readOptions(int argc, char **argv, options * o) {
 				o->unicode = 1;
 				break;
 			case 'H':
+				if(o->html) o->force_html = 1;
 				o->html = 1;
 				break;
 			case 'c':
@@ -188,7 +189,7 @@ void readOptions(int argc, char **argv, options * o) {
 		print_help(argc,argv);
 		exit(0);
 	}
-	if(o->html != 0 && o->outfile == NULL) {
+	if(o->html != 0 && (o->outfile == NULL || o->force_html)) {
 		o->silent = 1;
 	}
 	o->infile = argv[optind];
@@ -207,7 +208,7 @@ void newStandard(options * o) {
 		o->ausgabe = std_ausgabe;
 	}
 	if(o->html) {
-		if(o->outfile == NULL)
+		if(o->outfile == NULL || o->force_html)
 			o->ausgabe = out_html;
 		o->write = write_html;
 	}
@@ -226,7 +227,7 @@ void newNonStandard(options * o) {
 		o->ausgabe = nstd_ausgabe;
 	}
 	if(o->html) {
-		if(o->outfile == NULL)
+		if(o->outfile == NULL || o->force_html)
 			o->ausgabe = out_html;
 		o->write = write_html;
 	}
@@ -239,7 +240,8 @@ void print_help(int argc, char **argv) {
 	printf("\033[0;1mOptions\033[0m\n");
 	printf("  -U         Unicode borders\n");
 	printf("  -h         This help\n");
-	printf("  -H         HTML-Output");
+	printf("  -H         HTML-Output\n");
+	printf("             twice: print on stdout, even if outfile given\n");
 	printf("  -o <file>  Output-File\n");
 	printf("  -O <file>  Overlay for non-standard files\n");
 	printf("  -c         No colors\n");
@@ -257,7 +259,8 @@ printf("\033[0;1mUsage:\033[0m\n");
 	printf("\033[0;1mOptions\033[0m\n");
 	printf("  -U         Unicode borders\n");
 	printf("  -h         This help\n");
-	printf("  -H         HTML-Output");
+	printf("  -H         HTML-Output\n");
+	printf("             twice: print on stdout, even if outfile given\n");
 	printf("  -o <file>  Output-File\n");
 	printf("  -O <file>  Overlay for non-standard files\n");
 	printf("  -p         Plaintext\n");

@@ -1,5 +1,5 @@
-#ifndef output_h__
-#define output_h__
+#ifndef output_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__
+#define output_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__
 
 /**
  * Write the sudoku to a file
@@ -22,4 +22,4 @@ int s_write_error(char* fn,int err);
  */
 void s_plain(sudoku* s, int color);
 
-#endif /* output_h__ */
+#endif /* output_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__ */
