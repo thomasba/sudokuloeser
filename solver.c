@@ -1,4 +1,3 @@
-#include "types.h"
 #include "solver.h"
 
 int  sl_loes(sudoku* s, options * o) {

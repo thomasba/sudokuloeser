@@ -19,7 +19,6 @@
  * MA 02110-1301, USA.
  */
 
-#include "types.h"
 #include "main.h"
 #include "input.h"
 #include "input_nstd.h"

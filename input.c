@@ -1,4 +1,3 @@
-#include "types.h"
 #include "input.h"
 #include <string.h>
 #include <stdio.h>

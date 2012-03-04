@@ -1,4 +1,3 @@
-#include "types.h"
 #include "solver_nstd.h"
 
 int solver_nstd_check_nums(sudoku* s,int zahl,int z, int sp) {

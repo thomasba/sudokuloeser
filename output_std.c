@@ -1,4 +1,3 @@
-#include "types.h"
 #include "output_std.h"
 #include <stdio.h>
 

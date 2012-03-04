@@ -1,6 +1,8 @@
 #ifndef solver_std_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__
 #define solver_std_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__
 
+#include "types.h"
+
 /**
  * Checks if there are other posibilities for the number if not return 1
  * @param s The sudoku struct

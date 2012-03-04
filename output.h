@@ -1,6 +1,8 @@
 #ifndef output_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__
 #define output_2b894a04_3a0c_4223_bf83_6ab40c0f5e57_h__
 
+#include "types.h"
+
 /**
  * Write the sudoku to a file
  * @param fn The Filename
