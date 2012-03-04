@@ -1,4 +1,4 @@
-#include "input.h"
+#include "input_nstd.h"
 #include <string.h>
 #include <stdio.h>
 #ifdef linux
