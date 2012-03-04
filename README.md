@@ -23,13 +23,14 @@ For better usage the Output is colored.
 
 # Usage
 
-age:
-  ./sudokuloeser [options] <input_file>
-Options
-  -U         Unicode borders
-  -h         This help
-  -o <file>  Output-File
-  -O <file>  Overlay for non-standard files  -c         No colors
-  -p         Plaintext
-  -n         Dont solve, just print
-  -s         silent
+    Usage:
+      ./sudokuloeser [options] <input_file>
+    Options
+      -U         Unicode borders
+      -h         This help
+      -H         HTML-Output
+      -o <file>  Output-File
+      -O <file>  Overlay for non-standard files  -c         No colors
+      -p         Plaintext
+      -n         Dont solve, just print
+      -s         silent
