@@ -36,11 +36,12 @@ void printHead(FILE * fp) {
 	fprintf(fp,"<!DOCTYPE html>\n");
 	fprintf(fp,"<html>\n");
 	fprintf(fp,"	<head>\n");
+	fprintf(fp,"		<meta charset=\"utf-8\">");
 	fprintf(fp,"		<title>Sudoku (solved)</title>\n");
 	fprintf(fp,"		<style type=\"text/css\">\n");
 	fprintf(fp,"			.c1{background:#c8ffc8}.c2{background:#ffff66}.c3{background:#83caff}.c4{background:#ff950e}.c5{background:#0084d1}.c6{background:#aecf00}.c7{background:#ffc8c8}.c8{background:#00ffff}.c9{background:#c8c8ff}\n");
 	fprintf(fp,"			table{border-collapse:collapse}td{border:1px solid #000;height:3em;width:3em;text-align:center;vertical-align:middle;font-weight:bold}\n");
-	fprintf(fp,"			.v{text-decoration:underline}.b{font-style:italic}\n");
+	fprintf(fp,"			.v{text-decoration:underline}.b{font-style:italic}.s{font-size:0.6em}\n");
 	fprintf(fp,"		</style>\n");
 	fprintf(fp,"	</head>\n");
 	fprintf(fp,"	<body>\n");
@@ -49,6 +50,9 @@ void printHead(FILE * fp) {
 
 void printFoot(FILE * fp) {
 	fprintf(fp,"		</table>\n");
+	fprintf(fp,"		<p class=\"s\">\n");
+	fprintf(fp,"			<span class=\"v\">Given Values</span> - <span class=\"b\">Values found by backtracking</span>\n");
+	fprintf(fp,"		</p>\n");
 	fprintf(fp,"	</body>\n");
 	fprintf(fp,"</html>\n");
 }
