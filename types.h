@@ -23,6 +23,7 @@ typedef struct options {
 	void (*set_num)(sudoku*,int,int,int);
 	int (*test)(sudoku*,int,int,int);
 	void (*ausgabe)(sudoku*,int);
+	int (*write)(char*,sudoku*);
 } options;
 
 #endif /* types_h__ */

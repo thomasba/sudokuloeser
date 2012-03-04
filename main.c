@@ -29,6 +29,7 @@
 #include "output.h"
 #include "output_std.h"
 #include "output_nstd.h"
+#include "html.h"
 #include <stdio.h>
 #include <time.h>
 #include <ctype.h>
@@ -44,6 +45,7 @@ int main(int argc, char **argv) {
 #endif
 	sudoku s={ {{0}}, {{0}}, {{0}}, {{{1}}}, 81 };
 	char st=0,ret=0;
+	int i,j;
 #ifdef linux
 	struct timespec ts,te,l_ts,l_te;
 	long double t;
@@ -63,6 +65,12 @@ int main(int argc, char **argv) {
 		if( s_b_einlesen(o.overlay,&s) == 0 ) {
 			fprintf(stderr,"Ungueltiges Dateiformat (Overlay)!\n");
 			return 2;
+		}
+	}else if(o.html == 1){
+		for(i=0;i<9;i++) {
+			for(j=0;j<9;j++) {
+				s.feld[i][j] = ((i/3)*3)+1+(j/3);
+			}
 		}
 	}
 	/* Aus Datei einlesen und Fehler auswerten */
@@ -114,7 +122,7 @@ int main(int argc, char **argv) {
 			if(!o.silent) printf("Loesung gefunden:\n\n");
 		}
 		o.ausgabe(&s,o.color);
-		if(o.outfile != NULL) s_write( o.outfile ,&s );
+		if(o.outfile != NULL) o.write( o.outfile ,&s );
 	}
 #ifdef linux
 	if(!o.silent) {
@@ -181,6 +189,9 @@ void readOptions(int argc, char **argv, options * o) {
 		print_help(argc,argv);
 		exit(0);
 	}
+	if(o->html != 0 && o->outfile == NULL) {
+		o->silent = 1;
+	}
 	o->infile = argv[optind];
 }
 void newStandard(options * o) {
@@ -188,6 +199,7 @@ void newStandard(options * o) {
 	o->set_num = solver_set_num;
 	o->test = solver_test;
 	/* Check which out put to use */
+	o->write = s_write;
 	if(o->unicode) {
 		o->ausgabe = std_ausgabe_unicode;
 	}else if(o->plaintext) {
@@ -195,18 +207,29 @@ void newStandard(options * o) {
 	}else{
 		o->ausgabe = std_ausgabe;
 	}
+	if(o->html) {
+		if(o->outfile == NULL)
+			o->ausgabe = out_html;
+		o->write = write_html;
+	}
 }
 void newNonStandard(options * o) {
 	o->check_nums = solver_nstd_check_nums;
 	o->set_num = solver_nstd_set_num;
 	o->test = solver_nstd_test;
 	/* Check which out put to use */
+	o->write = s_write;
 	if(o->unicode) {
 		o->ausgabe = nstd_ausgabe_unicode;
 	}else if(o->plaintext) {
 		o->ausgabe = s_plain;
 	}else{
 		o->ausgabe = nstd_ausgabe;
+	}
+	if(o->html) {
+		if(o->outfile == NULL)
+			o->ausgabe = out_html;
+		o->write = write_html;
 	}
 }
 
@@ -217,6 +240,7 @@ void print_help(int argc, char **argv) {
 	printf("\033[0;1mOptions\033[0m\n");
 	printf("  -U         Unicode borders\n");
 	printf("  -h         This help\n");
+	printf("  -H         HTML-Output");
 	printf("  -o <file>  Output-File\n");
 	printf("  -O <file>  Overlay for non-standard files\n");
 	printf("  -c         No colors\n");
@@ -234,6 +258,7 @@ printf("\033[0;1mUsage:\033[0m\n");
 	printf("\033[0;1mOptions\033[0m\n");
 	printf("  -U         Unicode borders\n");
 	printf("  -h         This help\n");
+	printf("  -H         HTML-Output");
 	printf("  -o <file>  Output-File\n");
 	printf("  -O <file>  Overlay for non-standard files\n");
 	printf("  -p         Plaintext\n");

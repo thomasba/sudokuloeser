@@ -1,8 +1,6 @@
 #ifndef output_h__
 #define output_h__
 
-#include "main.h"
-
 /**
  * Write the sudoku to a file
  * @param fn The Filename

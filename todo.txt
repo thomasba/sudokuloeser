@@ -1,1 +1,2 @@
-- HTML-Output
+- move #include "types.h" to header files
+- unique ids for header

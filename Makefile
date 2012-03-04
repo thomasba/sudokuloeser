@@ -1,5 +1,11 @@
-sudokuloeser: input.o input_nstd.o main.o output.o output_nstd.o output_std.o solver.o solver_nstd.o solver_std.o
-	gcc -lrt -o sudokuloeser input.o input_nstd.o main.o output.o output_nstd.o output_std.o solver.o solver_nstd.o solver_std.o
+sudokuloeser: input.o input_nstd.o main.o output.o output_nstd.o output_std.o solver.o solver_nstd.o solver_std.o html.o
+	gcc -lrt -o sudokuloeser input.o input_nstd.o main.o output.o output_nstd.o output_std.o solver.o solver_nstd.o solver_std.o html.o
+
+install: sudokuloeser
+	install -vDm755 sudokuloeser /usr/bin/sudokuloeser
+
+uninstall:
+	rm /usr/bin/sudokuloeser
 
 input.o: input.c
 	gcc -Wall -pedantic -c input.c
@@ -19,6 +25,8 @@ solver_nstd.o: solver_nstd.c
 	gcc -Wall -pedantic -c solver_nstd.c
 solver_std.o: solver_std.c
 	gcc -Wall -pedantic -c solver_std.c
+html.o: html.c html.h
+	gcc -Wall -pedantic -c html.c
 
 clean:
 	rm -vf *.o sudokuloeser
