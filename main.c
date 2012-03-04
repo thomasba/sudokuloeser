@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
 	/* Read the command line parameters */
 	readOptions(argc,argv,&o);
 	/* feed the functions */
-	if(o.outfile == NULL) {
+	if(o.overlay == NULL) {
 		printf("default\n");
 		newStandard(&o);
 	}else{
