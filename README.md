@@ -30,7 +30,8 @@ For better usage the Output is colored.
       -h         This help
       -H         HTML-Output
       -o <file>  Output-File
-      -O <file>  Overlay for non-standard files  -c         No colors
+      -O <file>  Overlay for non-standard files
+      -c         No colors
       -p         Plaintext
       -n         Dont solve, just print
       -s         silent
