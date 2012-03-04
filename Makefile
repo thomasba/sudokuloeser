@@ -29,4 +29,7 @@ html.o: html.c html.h
 	gcc -Wall -pedantic -c html.c
 
 clean:
+	rm -vf *.o
+
+clean_all:
 	rm -vf *.o sudokuloeser
