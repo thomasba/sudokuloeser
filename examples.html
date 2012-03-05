@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>sudokuloeser</title>
+		<link href="style.css" type="text/css" rel="stylesheet">
+	</head>
+	<body>
+		<header>
+			<h1>sudokuloeser</h1>
+			<ul>
+				<li><a href="index.html">Home</a></li>
+				<li>Examples</li>
+				<li><a href="download.html">Download</a></li>
+			</ul>
+		</header>
+		<section>
+			<h2>Examples</h2>
+
+			<h3>Usage</h3>
+
+			<pre class="vim"><code><span class="Type">$</span> <span class="Statement">./sudokuloeser -h</span>
+<strong>Usage:</strong>
+  ./sudokuloeser [options] &lt;input_file&gt;
+<strong>Options</strong>
+  -U         Unicode borders
+  -h         This help
+  -H         HTML-Output
+             twice: print on stdout, even if outfile given
+  -o &lt;file&gt;  Output-File
+  -O &lt;file&gt;  Overlay for non-standard files
+  -c         No colors
+  -p         Plaintext
+  -n         Dont solve, just print
+  -s         silent
+<strong>Output:</strong>
+  <span style="font-weight:bold;color:#00ff00;">green:</span>     Given values
+  <span style="font-weight:bold;color:#ffff00;">yellow:</span>      Values find by logic
+  white:      Values find by backtracking
+</code></pre>
+
+			<h3>HTML-Output</h3>
+			<p>
+				<a href="examples/sudoku_1.html" target="example_html">Example 1</a>
+				<a href="examples/sudoku_2.html" target="example_html">Example 2</a>
+				<a href="examples/sudoku_3.html" target="example_html">Example 3</a>
+				<a href="examples/sudoku_4.html" target="example_html">Example 4</a>
+			</p>
+			<iframe seamless="seamless" name="example_html" src="examples/sudoku_1.html"></iframe>
+			
+			<h3>ASCII</h3>
+			<pre class="vim"><code><span class="Type">$</span> <span class="Statement">./sudokuloeser example/sudoku_1.txt</span>
+Suche...
+Probiere es mit Logik...     FAIL
+Nun mit Backtracking...      OK
+Loesung gefunden:
+
++-------+-------+-------+
+| 2 8 6 | 1 9 4 | 7 5 3 |
+| 7 9 4 | 5 8 3 | 6 1 2 |
+| 5 1 3 | 6 2 7 | 4 8 9 |
++-------+-------+-------+
+| 3 2 8 | 4 5 1 | 9 6 7 |
+| 9 5 7 | 2 6 8 | 3 4 1 |
+| 6 4 1 | 7 3 9 | 8 2 5 |
++-------+-------+-------+
+| 8 6 9 | 3 1 5 | 2 7 4 |
+| 4 3 5 | 8 7 2 | 1 9 6 |
+| 1 7 2 | 9 4 6 | 5 3 8 |
++-------+-------+-------+
+
+Benoetigte Zeit (loesen): 0.000677s
+Benoetigte Zeit (gesamt): 0.002028s</code></pre>
+
+			<h3>Unicode</h3>
+			<pre class="vim"><code><span class="Type">$</span> <span class="Statement">./sudokuloeser -U example/sudoku_1.txt</span>
+Suche...
+Probiere es mit Logik...     FAIL
+Nun mit Backtracking...      OK
+Loesung gefunden:
+
+┏━━━┯━━━┯━━━┳━━━┯━━━┯━━━┳━━━┯━━━┯━━━┓
+┃ 2 │ 8 │ 6 ┃ 1 │ 9 │ 4 ┃ 7 │ 5 │ 3 ┃
+┠───┼───┼───╂───┼───┼───╂───┼───┼───┨
+┃ 7 │ 9 │ 4 ┃ 5 │ 8 │ 3 ┃ 6 │ 1 │ 2 ┃
+┠───┼───┼───╂───┼───┼───╂───┼───┼───┨
+┃ 5 │ 1 │ 3 ┃ 6 │ 2 │ 7 ┃ 4 │ 8 │ 9 ┃
+┣━━━┿━━━┿━━━╋━━━┿━━━┿━━━╋━━━┿━━━┿━━━┫
+┃ 3 │ 2 │ 8 ┃ 4 │ 5 │ 1 ┃ 9 │ 6 │ 7 ┃
+┠───┼───┼───╂───┼───┼───╂───┼───┼───┨
+┃ 9 │ 5 │ 7 ┃ 2 │ 6 │ 8 ┃ 3 │ 4 │ 1 ┃
+┠───┼───┼───╂───┼───┼───╂───┼───┼───┨
+┃ 6 │ 4 │ 1 ┃ 7 │ 3 │ 9 ┃ 8 │ 2 │ 5 ┃
+┣━━━┿━━━┿━━━╋━━━┿━━━┿━━━╋━━━┿━━━┿━━━┫
+┃ 8 │ 6 │ 9 ┃ 3 │ 1 │ 5 ┃ 2 │ 7 │ 4 ┃
+┠───┼───┼───╂───┼───┼───╂───┼───┼───┨
+┃ 4 │ 3 │ 5 ┃ 8 │ 7 │ 2 ┃ 1 │ 9 │ 6 ┃
+┠───┼───┼───╂───┼───┼───╂───┼───┼───┨
+┃ 1 │ 7 │ 2 ┃ 9 │ 4 │ 6 ┃ 5 │ 3 │ 8 ┃
+┗━━━┷━━━┷━━━┻━━━┷━━━┷━━━┻━━━┷━━━┷━━━┛
+
+Benoetigte Zeit (loesen): 0.000607s
+Benoetigte Zeit (gesamt): 0.009852s</code></pre>
+
+			<h3>Plaintext</h3>
+			<pre class="vim"><code><span class="Type">$</span> <span class="Statement">./sudokuloeser -p example/sudoku_1.txt</span>
+Suche...
+Probiere es mit Logik...     FAIL
+Nun mit Backtracking...      OK
+Loesung gefunden:
+
+286194753
+794583612
+513627489
+328451967
+957268341
+641739825
+869315274
+435872196
+172946538
+
+Benoetigte Zeit (loesen): 0.000609s
+Benoetigte Zeit (gesamt): 0.001194s</code></pre>
+		</section>
+	</body>
+</html>
