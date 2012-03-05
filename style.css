@@ -3,23 +3,34 @@
 html {
 	overflow: scroll;
 	overflow-x: auto;
-	background:#eeeeee;
-	background: -moz-linear-gradient(center top , #999999, #ffffff) fixed;
-	background: -webkit-gradient(linear, center top, center bottom, from(#999999), to(#ffffff)) fixed;
-	background: -o-linear-gradient(top,  #999999, #ffffff) fixed;
-	background: -ms-linear-gradient(center top, #999999. #ffffff) fixed;
-	background: linear-gradient(center top, #999999, #ffffff) fixed;
+	background:#C4E261;
+	background: -moz-linear-gradient(center top , #C4E261, #99b04c) fixed;
+	background: -webkit-gradient(linear, center top, center bottom, from(#C4E261), to(#99b04c)) fixed;
+	background: -o-linear-gradient(top,  #C4E261, #99b04c) fixed;
+	background: -ms-linear-gradient(center top, #C4E261. #99b04c) fixed;
+	background: linear-gradient(center top, #C4E261, #99b04c) fixed;
 }
 body {
 	background-color:#ffffff;
 	color:#000000;
 	font-family:"Bitstream Vera Sans","Verdana",sans-serif;
-	width:780px;
+	width:50%;
+	min-width:33em;
 	border:1px solid #000;
 	box-shadow:5px 5px 3px 0px #333333;
 	padding:10px;
-	margin:0 auto 20px auto;
+	margin:10px auto 20px auto;
 	border-radius:10px;
+	z-index:100;
+}
+
+#nav {
+	margin:0;
+	margin-left:-211px;
+	width:200px;
+	padding:0;
+	text-align:right;
+	float:left;
 }
 
 a {
@@ -31,15 +42,6 @@ a:hover {
 	border-bottom:1px solid #000000;
 }
 
-header {
-	margin:-16px -30px 10px -30px;
-	background-color:#ccc;
-	box-shadow:2px 2px 4px 0 #999999;
-	border-bottom:1px solid #999999;
-	height:100px;
-	border-bottom-left-radius:5px;
-	border-bottom-right-radius:5px;
-}
 header h1 {
 	color:#0084D1;
 	margin:5px auto;
@@ -48,28 +50,30 @@ header h1 {
 	border-bottom:1px solid #0084D1;
 }
 
-header ul {
-	text-align: center;
-	padding:0;
-	padding-top:10px;
-	margin:0;
-}
-
-header ul li {
+#nav li {
 	list-style-position:none;
 	list-style-type:none;
-	padding:0px 5px;
-	display: inline;
+	padding:0px 0px;
+	margin:0 0 15px 0;
 }
-header ul li a {
-	color:#4b8000;
+#nav li a {
+	color:#C4E261;
 	text-decoration:none;
 	border:none;
+	background-color:#404a20;
+	padding:5px 10px;
+	border:1px solid #000;
+	border-top-left-radius:5px;
+	border-bottom-left-radius:5px;
+	border-right:none;
+	z-index:50;
+	box-shadow:0px 0px 3px 0px #333333;
 }
 
-header ul li a:hover {
-	text-decoration:underline;
-	border:none;
+#nav li a:hover {
+	background-color:#6c7d36;
+	border:1px solid #000;
+	border-right:none;
 }
 
 h2 {
@@ -83,6 +87,29 @@ iframe {
 	width:30em;
 	height:30em;
 	border:1px solid #cccccc;
+}
+
+@media (max-width: 800px) {
+	body {
+		width:auto;
+		margin:10px;
+	}
+	#nav {
+		margin:10px;
+		float:none;
+		width:auto;
+		text-align:center;
+	}
+	#nav li {
+		display:inline;
+	}
+	#nav li a {
+		border:1px solid #000;
+		border-radius:5px;
+	}
+	#nav li a:hover {
+		border:1px solid #000;
+	}
 }
 
 /** VIM **/
