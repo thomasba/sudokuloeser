@@ -36,7 +36,7 @@ void printHead(FILE * fp) {
 	fprintf(fp,"<!DOCTYPE html>\n");
 	fprintf(fp,"<html>\n");
 	fprintf(fp,"	<head>\n");
-	fprintf(fp,"		<meta charset=\"utf-8\">");
+	fprintf(fp,"		<meta charset=\"utf-8\">\n");
 	fprintf(fp,"		<title>Sudoku (solved)</title>\n");
 	fprintf(fp,"		<style type=\"text/css\">\n");
 	fprintf(fp,"			.c1{background:#c8ffc8}.c2{background:#ffff66}.c3{background:#83caff}.c4{background:#ff950e}.c5{background:#0084d1}.c6{background:#aecf00}.c7{background:#ffc8c8}.c8{background:#00ffff}.c9{background:#c8c8ff}\n");
