@@ -1,4 +1,4 @@
-FLAGS := -Wall -pedantic
+FLAGS := -Wall -O3 -pedantic
 LIBS :=
 
 ifeq ($(ARCH),win)
