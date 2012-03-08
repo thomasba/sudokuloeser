@@ -51,7 +51,7 @@ void nstd_ausgabe_unicode(sudoku* s,int color) {
 		printf("\n");
 		/* trenner für i != 8 */
 		if(i<8) {
-			printf("%s", (s->belegung[ i ][ j ] == s->belegung[i+1][ j ]) ? "┠───" : "┣━━━" );
+			printf("%s", (s->belegung[ i ][ 0 ] == s->belegung[i+1][ 0 ]) ? "┠───" : "┣━━━" );
 			for(j = 0; j < 8; j++) {
 				printf("%s", rahmen(
 							  (s->belegung[ i ][ j ] != s->belegung[ i ][j+1]) * 1
