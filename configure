@@ -1,0 +1,57 @@
+#!/bin/sh
+
+exec > Makefile
+
+echo 'FLAGS := -Wall -O3 -pedantic'
+echo 'LIBS :='
+echo
+echo 'ifeq ($(ARCH),win)'
+echo '	GCC := i486-mingw32-gcc'
+echo '	PROG := sudokuloeser.exe'
+echo 'else'
+echo '	GCC := gcc'
+echo '	LIBS +=-lrt'
+echo '	PROG := sudokuloeser'
+echo 'endif'
+echo
+echo 'ifeq ($(BUILD),devel)'
+echo '	FLAGS += -ggdb'
+echo 'endif'
+echo
+echo SRCS = *.c
+echo
+echo 'OBJS = $(SRCS:.c=.o)'
+echo '$(PROG): $(OBJS)'
+echo '	$(GCC) $(FLAGS) $(LIBS) -o $(PROG) $(OBJS)'
+echo
+echo 'install: sudokuloeser'
+echo '	install -vDm755 sudokuloeser /usr/bin/sudokuloeser'
+echo
+echo 'uninstall:'
+echo '	rm /usr/bin/sudokuloeser'
+echo
+gcc -MM *.c
+echo
+echo '%.o: %.c'
+echo '	${GCC} ${FLAGS} -c $*.c'
+echo
+echo 'clean:'
+echo '	rm -vf *.o'
+echo
+echo 'clean_all:'
+echo '	rm -vf *.o sudokuloeser sudokuloeser.exe'
+echo
+echo 'help:'
+echo '	@echo "make [target] [options]"'
+echo '	@echo '
+echo '	@echo "Targets:"'
+echo '	@echo "  sudokuloeser  creates the executable (default)"'
+echo '	@echo "  install       installs the binary to /usr/bin/"'
+echo '	@echo "  uninstall     uninstalls the binary"'
+echo '	@echo "  clean         Remove objects"'
+echo '	@echo "  clean_all     Remove objects and executables"'
+echo '	@echo "  help          Print this help."'
+echo '	@echo "Options:"'
+echo '	@echo "  BUILD=devel   include debug symbols"'
+echo '	@echo "  "'
+echo '	@echo "  ARCH=win      Cross Compile for Windows"'

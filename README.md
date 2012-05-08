@@ -21,6 +21,7 @@ For better usage the Output is colored.
 
 ## Installation
 
+    ./configure
     make
     make install
 
