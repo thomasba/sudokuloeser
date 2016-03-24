@@ -3,25 +3,22 @@
 	<head>
 		<meta charset="utf-8">
 		<title>sudokuloeser</title>
-		<link href="/style.css" type="text/css" rel="stylesheet">
+		<link href="../style.css" type="text/css" rel="stylesheet">
 	</head>
 	<body>
-		<header>
-			<h1>sudokuloeser</h1>
-		</header>
-		<ul id="nav">
+		<h1>sudokuloeser</h1>
+		<ul class="nav">
 			<li><a href="/">../</a></li>
-			<li><span>sudokuloeser</span></li>
 			<li><a href="index.html">Home</a></li>
 			<li><a href="examples.html">Examples</a></li>
 			<li><a href="download.html">Download</a></li>
 		</ul>
-		<section>
-			<h2>Examples</h2>
+		<h2>Examples</h2>
+		<div class="two-col">
 
-			<h3>Usage</h3>
-
-			<pre class="vim"><code><span class="Type">$</span> <span class="Statement">./sudokuloeser -h</span>
+			<div class="no-break">
+				<h3>Usage</h3>
+				<pre class="vim"><code><span class="Type">$</span> <span class="Statement">./sudokuloeser -h</span>
 <strong>Usage:</strong>
   ./sudokuloeser [options] &lt;input_file&gt;
 <strong>Options</strong>
@@ -40,18 +37,22 @@
   <span style="font-weight:bold;color:#ffff00;">yellow:</span>      Values find by logic
   white:      Values find by backtracking
 </code></pre>
+			</div>
 
-			<h3>HTML-Output</h3>
-			<p>
-				<a href="examples/sudoku_1.html" target="example_html">Example 1</a>
-				<a href="examples/sudoku_2.html" target="example_html">Example 2</a>
-				<a href="examples/sudoku_3.html" target="example_html">Example 3</a>
-				<a href="examples/sudoku_4.html" target="example_html">Example 4</a>
-			</p>
-			<iframe seamless="seamless" name="example_html" src="examples/sudoku_1.html"></iframe>
-			
-			<h3>ASCII</h3>
-			<pre class="vim"><code><span class="Type">$</span> <span class="Statement">./sudokuloeser example/sudoku_1.txt</span>
+			<div class="no-break">
+				<h3>HTML-Output</h3>
+				<p>
+					<a href="examples/sudoku_1.html" target="example_html">Example 1</a>
+					<a href="examples/sudoku_2.html" target="example_html">Example 2</a>
+					<a href="examples/sudoku_3.html" target="example_html">Example 3</a>
+					<a href="examples/sudoku_4.html" target="example_html">Example 4</a>
+				</p>
+				<iframe seamless="seamless" name="example_html" src="examples/sudoku_1.html"></iframe>
+			</div>
+
+			<div class="no-break">
+				<h3>ASCII</h3>
+				<pre class="vim"><code><span class="Type">$</span> <span class="Statement">./sudokuloeser example/sudoku_1.txt</span>
 Suche...
 Probiere es mit Logik...     FAIL
 Nun mit Backtracking...      OK
@@ -73,9 +74,11 @@ Loesung gefunden:
 
 Benoetigte Zeit (loesen): 0.000677s
 Benoetigte Zeit (gesamt): 0.002028s</code></pre>
+			</div>
 
-			<h3>Unicode</h3>
-			<pre class="vim"><code><span class="Type">$</span> <span class="Statement">./sudokuloeser -U example/sudoku_1.txt</span>
+			<div class="no-break">
+				<h3>Unicode</h3>
+				<pre class="vim"><code><span class="Type">$</span> <span class="Statement">./sudokuloeser -U example/sudoku_1.txt</span>
 Suche...
 Probiere es mit Logik...     FAIL
 Nun mit Backtracking...      OK
@@ -103,9 +106,11 @@ Loesung gefunden:
 
 Benoetigte Zeit (loesen): 0.000607s
 Benoetigte Zeit (gesamt): 0.009852s</code></pre>
+			</div>
 
-			<h3>Plaintext</h3>
-			<pre class="vim"><code><span class="Type">$</span> <span class="Statement">./sudokuloeser -p example/sudoku_1.txt</span>
+			<div class="no-break">
+				<h3>Plaintext</h3>
+				<pre class="vim"><code><span class="Type">$</span> <span class="Statement">./sudokuloeser -p example/sudoku_1.txt</span>
 Suche...
 Probiere es mit Logik...     FAIL
 Nun mit Backtracking...      OK
@@ -123,6 +128,7 @@ Loesung gefunden:
 
 Benoetigte Zeit (loesen): 0.000609s
 Benoetigte Zeit (gesamt): 0.001194s</code></pre>
-		</section>
+			</div>
+		</div>
 	</body>
 </html>
